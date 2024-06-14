@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative 'type_eval_rb/comparator'
 require_relative 'type_eval_rb/version'
 
 module TypeEvalRb

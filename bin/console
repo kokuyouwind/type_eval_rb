@@ -4,8 +4,65 @@
 require 'bundler/setup'
 require 'type_eval_rb'
 
+require 'rbs'
+
 # You can add fixtures and/or initialization code here to make experimenting
 # with your gem easier. You can also use a different console, if you like.
+def examples_path(name)
+  File.expand_path("../spec/fixtures/examples/#{name}", __dir__)
+end
+
+def expected_path(name)
+  "#{examples_path(name)}/refined/sig/#{name}.rbs"
+end
+
+def actual_path(name)
+  "#{examples_path(name)}/sig/#{name}.rbs"
+end
+
+def expected_env
+  @expected_env ||= begin
+    loader = RBS::EnvironmentLoader.new()
+    loader.add(path: Pathname(expected_path('user_factory')))
+    RBS::Environment.from_loader(loader).resolve_type_names
+  end
+end
+
+def actual_env
+  @actual_env ||= begin
+    loader = RBS::EnvironmentLoader.new()
+    loader.add(path: Pathname(actual_path('user_factory')))
+    RBS::Environment.from_loader(loader).resolve_type_names
+  end
+end
+
+def user_factory_type_name
+  @user_factory_type_name ||= RBS::TypeName.new(name: :UserFactory, namespace: RBS::Namespace.root)
+end
+
+def user_type_name
+  @user_type_name ||= RBS::TypeName.new(name: :User, namespace: RBS::Namespace.root)
+end
+
+def expected_user_factory_decl
+  @expected_user_factory_decl ||= expected_env.class_decls[user_factory_type_name]
+end
+
+def expected_user_decl
+  @expected_user_decl ||= expected_env.class_decls[user_type_name]
+end
+
+def actual_user_factory_decl
+  @actual_user_factory_decl ||= actual_env.class_decls[user_factory_type_name]
+end
+
+def actual_user_decl
+  @actual_user_decl ||= actual_env.class_decls[user_type_name]
+end
+
+def compare
+  TypeEvalRb::Comparator.new(expected_env, actual_env).compare('UserFactory')
+end
 
 require 'irb'
 IRB.start(__FILE__)

@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     type_eval_rb (0.1.0)
+      rbs (~> 3.5.1)
 
 GEM
   remote: https://rubygems.org/
@@ -10,6 +11,7 @@ GEM
     diff-lcs (1.5.1)
     json (2.7.2)
     language_server-protocol (3.17.0.3)
+    logger (1.6.0)
     parallel (1.24.0)
     parser (3.3.2.0)
       ast (~> 2.4.1)
@@ -17,6 +19,8 @@ GEM
     racc (1.8.0)
     rainbow (3.1.1)
     rake (13.2.1)
+    rbs (3.5.1)
+      logger
     regexp_parser (2.9.2)
     rexml (3.2.8)
       strscan (>= 3.0.9)
