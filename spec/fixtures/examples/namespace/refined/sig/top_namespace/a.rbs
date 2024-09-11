@@ -1,0 +1,8 @@
+module TopNamespace
+  class A
+    @hoge: A
+    @fuga: TopNamespace::A
+
+    def foo: (String bar) -> ::TopNamespace::A
+  end
+end

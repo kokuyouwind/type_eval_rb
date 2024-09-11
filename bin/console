@@ -7,5 +7,48 @@ require 'type_eval_rb'
 # You can add fixtures and/or initialization code here to make experimenting
 # with your gem easier. You can also use a different console, if you like.
 
+def examples_path(name = '')
+  File.expand_path("../spec/fixtures/examples/#{name}", __dir__)
+end
+
+def expected_path(name)
+  "#{examples_path(name)}/refined/sig"
+end
+
+def actual_path(name)
+  "#{examples_path(name)}/sig"
+end
+
+def expected_env(example_name)
+  TypeEvalRb::Environment.from_path(expected_path(example_name))
+end
+
+def actual_env(example_name)
+  TypeEvalRb::Environment.from_path(actual_path(example_name))
+end
+
+def expected_class_decls(example_name)
+  expected_env(example_name).class_decls
+end
+
+def actual_class_decls(example_name)
+  actual_env(example_name).class_decls
+end
+
+def compare(example_name)
+  TypeEvalRb::ComparisonTree.from_envs(
+    expected: expected_env(example_name),
+    actual: actual_env(example_name)
+  )
+end
+
+def compare_user_factory
+  compare('user_factory')
+end
+
+def compare_namespace
+  compare('namespace')
+end
+
 require 'irb'
 IRB.start(__FILE__)

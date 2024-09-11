@@ -10,9 +10,18 @@ AllCops:
     - 'spec/fixtures/**/*'
     - 'vendor/bundle/**/*'
 
+Metrics/AbcSize:
+  Max: 20
+
+Metrics/MethodLength:
+  Max: 15
+
 Metrics/BlockLength:
   Exclude:
     - Rakefile
+
+Style/MultilineBlockChain:
+  Enabled: false
 
 Style/StringLiterals:
   Enabled: true

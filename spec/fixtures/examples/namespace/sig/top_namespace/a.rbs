@@ -1,0 +1,8 @@
+module TopNamespace
+  class A
+    @hoge: undefined
+    @fuga: undefined
+
+    def foo: (untyped bar) -> untyped
+  end
+end
