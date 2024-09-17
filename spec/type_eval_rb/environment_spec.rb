@@ -15,7 +15,7 @@ RSpec.describe TypeEvalRb::Environment do
   describe '.from_path' do
     subject { described_class.from_path(path) }
 
-    let(:path) { FixturesHelper.example_path('user_factory') }
+    let(:path) { FixturesHelper.expected_sig_path('user_factory') }
     let(:user_factory_name) { TypeHelper.type_name('::UserFactory') }
     let(:user_name) { TypeHelper.type_name('::User') }
 
