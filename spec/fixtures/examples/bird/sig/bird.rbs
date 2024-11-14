@@ -1,0 +1,14 @@
+class Bird
+end
+
+class Duck < Bird
+  def cry: () -> untyped
+end
+
+class Goose < Bird
+  def cry: () -> untyped
+end
+
+class Object
+  def make_sound: (untyped bird) -> untyped
+end

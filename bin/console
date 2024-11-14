@@ -50,5 +50,13 @@ def compare_namespace
   compare('namespace')
 end
 
+def compare_bird
+  compare('bird')
+end
+
+def compare_dynamic
+  compare('dynamic')
+end
+
 require 'irb'
 IRB.start(__FILE__)

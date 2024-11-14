@@ -1,0 +1,5 @@
+class Dynamic
+  def print_foo: () -> void
+
+  def print_bar: () -> void
+end
