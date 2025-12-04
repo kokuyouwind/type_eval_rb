@@ -1,0 +1,14 @@
+{
+  "extraKnownMarketplaces": {
+    "kokuyouwind-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "kokuyouwind/claude-plugins"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "dev-guidelines@kokuyouwind-plugins": true,
+    "issue-resolver@kokuyouwind-plugins": true
+  }
+}
