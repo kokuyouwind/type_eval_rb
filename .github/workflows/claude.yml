@@ -38,3 +38,13 @@ jobs:
           additional_permissions: |
             actions: read
           claude_args: '--allowed-tools "Bash(gh issue:*),Bash(gh label:*),Bash(gh pr:*),Skill(*)"'
+
+          # Plugin marketplace configuration
+          # Note: .claude/settings.json is not automatically loaded in GitHub Actions
+          plugin_marketplaces: |
+            https://github.com/kokuyouwind/claude-plugins.git
+
+          # Install required plugins for development workflow
+          plugins: |
+            dev-guidelines@kokuyouwind-plugins
+            issue-resolver@kokuyouwind-plugins
