@@ -32,16 +32,16 @@ TypeEvalRb is a micro-benchmarking framework for Ruby type inference tools. It c
 ##### MethodNode (`lib/type_eval_rb/comparison_tree/method_node.rb`)
 - ✅ Method name comparison
 - ✅ Required positional parameters comparison
+- ✅ Optional positional parameters (required: false)
+- ✅ Keyword parameters (required and optional, param_type: :keyword)
+- ✅ Rest parameters (positional and keyword, rest: true)
+- ✅ Block parameters (TypeNode wrapping RBS::Types::Block)
+- ✅ Singleton method support (kind: :singleton or :instance)
 - ✅ Return type comparison
 - ✅ Pretty-print support
-- ✅ Metrics: `count_leaf` and `count_matches` (sum of parameters + return_type)
-- ❌ **Missing**: Optional parameters
-- ❌ **Missing**: Rest parameters (`*args`)
-- ❌ **Missing**: Keyword parameters
-- ❌ **Missing**: Block parameters
+- ✅ Metrics: `count_leaf` and `count_matches` (sum of parameters + return_type + block)
 - ❌ **Missing**: Method overloading support
 - ❌ **Missing**: Visibility (public/private/protected)
-- ❌ **Missing**: Singleton method support (self.method_name)
 
 ##### InstanceVariableNode (`lib/type_eval_rb/comparison_tree/instance_variable_node.rb`)
 - ✅ Instance variable name comparison

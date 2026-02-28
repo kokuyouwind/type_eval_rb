@@ -19,6 +19,10 @@ RSpec.describe TypeEvalRb::ComparisonTree::MethodNode do
       expect(subject.parameters).to eq(parameters)
       expect(subject.return_type).to eq(return_type)
     end
+
+    it 'defaults kind to :instance' do
+      expect(subject.kind).to eq(:instance)
+    end
   end
 
   describe '#count_leaf' do
@@ -52,6 +56,33 @@ RSpec.describe TypeEvalRb::ComparisonTree::MethodNode do
       optional = node.parameters.reject(&:required)
       expect(optional.size).to eq(1)
       expect(optional.first.name).to eq('title')
+    end
+  end
+
+  describe '.from_ast with singleton method' do
+    let(:env) { TypeEvalRb::Environment.from_path(FixturesHelper.example_path('singleton_methods')) }
+    let(:class_decl) do
+      env.class_decls[RBS::Namespace.parse('::SingletonMethods').to_type_name].decls.first.decl
+    end
+
+    context 'with singleton: true' do
+      subject(:node) { described_class.from_ast('create', method_def, nil, kind: :singleton) }
+
+      let(:method_def) { class_decl.members.find { |m| m.name.to_s == 'create' && m.singleton? } }
+
+      it 'sets kind to :singleton' do
+        expect(node.kind).to eq(:singleton)
+      end
+    end
+
+    context 'without singleton flag' do
+      subject(:node) { described_class.from_ast('greet', method_def, nil) }
+
+      let(:method_def) { class_decl.members.find { |m| m.name.to_s == 'greet' && !m.singleton? } }
+
+      it 'defaults kind to :instance' do
+        expect(node.kind).to eq(:instance)
+      end
     end
   end
 

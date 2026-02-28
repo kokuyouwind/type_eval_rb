@@ -1,0 +1,5 @@
+class SingletonMethods
+  def self.create: (String name) -> SingletonMethods
+
+  def greet: () -> String
+end

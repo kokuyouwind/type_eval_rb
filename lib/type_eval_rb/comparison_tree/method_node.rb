@@ -3,15 +3,16 @@
 module TypeEvalRb
   class ComparisonTree
     class MethodNode < Node
-      attr_reader :name, :parameters, :return_type, :block, :expected, :actual
+      attr_reader :name, :parameters, :return_type, :block, :kind, :expected, :actual
 
       class << self
-        def from_ast(name, expected, actual)
+        def from_ast(name, expected, actual, kind: :instance)
           new(
             name:,
             parameters: parameters_to_nodes(expected, actual),
             return_type: return_types_to_node(expected, actual),
             block: block_to_node(expected, actual),
+            kind:,
             expected:,
             actual:
           )
@@ -102,11 +103,12 @@ module TypeEvalRb
         end
       end
 
-      def initialize(name:, parameters:, return_type:, block: nil, expected: nil, actual: nil) # rubocop:disable Metrics/ParameterLists
+      def initialize(name:, parameters:, return_type:, block: nil, kind: :instance, expected: nil, actual: nil) # rubocop:disable Metrics/ParameterLists
         @name = name
         @parameters = parameters
         @return_type = return_type
         @block = block
+        @kind = kind
         @expected = expected
         @actual = actual
         super()
