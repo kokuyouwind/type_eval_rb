@@ -1,0 +1,5 @@
+class RestParams
+  def log: (String level, *String messages) -> void
+
+  def configure: (**Integer options) -> void
+end

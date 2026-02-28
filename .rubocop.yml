@@ -13,6 +13,9 @@ AllCops:
 Metrics/AbcSize:
   Max: 20
 
+Metrics/ClassLength:
+  Max: 120
+
 Metrics/MethodLength:
   Max: 15
 

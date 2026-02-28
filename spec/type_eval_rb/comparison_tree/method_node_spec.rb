@@ -55,6 +55,37 @@ RSpec.describe TypeEvalRb::ComparisonTree::MethodNode do
     end
   end
 
+  describe '.from_ast with rest parameters' do
+    let(:env) { TypeEvalRb::Environment.from_path(FixturesHelper.example_path('rest_params')) }
+    let(:class_decl) do
+      env.class_decls[RBS::Namespace.parse('::RestParams').to_type_name].decls.first.decl
+    end
+
+    context 'with rest positionals (*args)' do
+      subject(:node) { described_class.from_ast('log', method_def, nil) }
+
+      let(:method_def) { class_decl.members.find { |m| m.name.to_s == 'log' } }
+
+      it 'marks rest positional with rest: true' do
+        rest = node.parameters.select(&:rest)
+        expect(rest.size).to eq(1)
+        expect(rest.first.param_type).to eq(:positional)
+      end
+    end
+
+    context 'with rest keywords (**opts)' do
+      subject(:node) { described_class.from_ast('configure', method_def, nil) }
+
+      let(:method_def) { class_decl.members.find { |m| m.name.to_s == 'configure' } }
+
+      it 'marks rest keyword with rest: true and param_type: :keyword' do
+        rest = node.parameters.select(&:rest)
+        expect(rest.size).to eq(1)
+        expect(rest.first.param_type).to eq(:keyword)
+      end
+    end
+  end
+
   describe '.from_ast with keyword parameters' do
     subject(:node) { described_class.from_ast('connect', method_def, nil) }
 
@@ -82,7 +113,7 @@ RSpec.describe TypeEvalRb::ComparisonTree::MethodNode do
     it_behaves_like 'output expected pretty_print', <<~EXPECTED.strip
       MethodNode(name=foo,#{' '}
         parameters=[
-          ArgumentNode(name=bar, required=true, param_type=positional,#{' '}
+          ArgumentNode(name=bar, required=true, param_type=positional, rest=false,#{' '}
             type=TypeNode( expected="::String", actual="untyped"))
       #{'    '}
         ],

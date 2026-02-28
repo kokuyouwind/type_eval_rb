@@ -42,10 +42,25 @@ module TypeEvalRb
             build_keyword_argument_node(kw_name, param, actual_param, required: false)
           end
 
-          required + optional + req_kw + opt_kw
+          rest_pos = if method_type.rest_positionals
+                       actual_rest = actual_method_type&.rest_positionals
+                       [build_argument_node(method_type.rest_positionals, actual_rest, required: false, rest: true)]
+                     else
+                       []
+                     end
+
+          rest_kw = if method_type.rest_keywords
+                      actual_rest_kw = actual_method_type&.rest_keywords
+                      [build_argument_node(method_type.rest_keywords, actual_rest_kw,
+                                           required: false, param_type: :keyword, rest: true)]
+                    else
+                      []
+                    end
+
+          required + optional + rest_pos + req_kw + opt_kw + rest_kw
         end
 
-        def build_argument_node(expected_param, actual_param, required:, param_type: :positional)
+        def build_argument_node(expected_param, actual_param, required:, param_type: :positional, rest: false)
           ComparisonTree::ArgumentNode.new(
             name: expected_param.name.to_s,
             type: ComparisonTree::TypeNode.new(
@@ -53,7 +68,8 @@ module TypeEvalRb
               actual: actual_param ? actual_param.type : nil
             ),
             required:,
-            param_type:
+            param_type:,
+            rest:
           )
         end
 

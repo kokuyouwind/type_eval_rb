@@ -21,6 +21,10 @@ RSpec.describe TypeEvalRb::ComparisonTree::ArgumentNode do
       expect(subject.param_type).to eq(:positional)
     end
 
+    it 'defaults rest to false' do
+      expect(subject.rest).to be false
+    end
+
     context 'when required: false' do
       let(:argument_node) { described_class.new(name:, type:, required: false) }
 
@@ -54,7 +58,7 @@ RSpec.describe TypeEvalRb::ComparisonTree::ArgumentNode do
     let(:node) { argument_node }
 
     it_behaves_like 'output expected pretty_print', <<~EXPECTED.strip
-      ArgumentNode(name=foo, required=true, param_type=positional,#{' '}
+      ArgumentNode(name=foo, required=true, param_type=positional, rest=false,#{' '}
         type=TypeNode( expected="::String", actual="untyped"))
     EXPECTED
   end
