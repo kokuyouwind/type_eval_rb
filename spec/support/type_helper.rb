@@ -22,6 +22,42 @@ module TypeHelper
       RBS::Types::Bases::Nil.new(location: nil)
     end
 
+    def bool_type
+      RBS::Types::Bases::Bool.new(location: nil)
+    end
+
+    def void_type
+      RBS::Types::Bases::Void.new(location: nil)
+    end
+
+    def self_type
+      RBS::Types::Bases::Self.new(location: nil)
+    end
+
+    def top_type
+      RBS::Types::Bases::Top.new(location: nil)
+    end
+
+    def bottom_type
+      RBS::Types::Bases::Bottom.new(location: nil)
+    end
+
+    def union_type(*types)
+      RBS::Types::Union.new(types:, location: nil)
+    end
+
+    def optional_type(type)
+      RBS::Types::Optional.new(type:, location: nil)
+    end
+
+    def tuple_type(*types)
+      RBS::Types::Tuple.new(types:, location: nil)
+    end
+
+    def intersection_type(*types)
+      RBS::Types::Intersection.new(types:, location: nil)
+    end
+
     def type_node(expected, actual)
       TypeEvalRb::ComparisonTree::TypeNode.new(expected:, actual:)
     end
