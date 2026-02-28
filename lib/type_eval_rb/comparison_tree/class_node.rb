@@ -34,10 +34,13 @@ module TypeEvalRb
           expected.members.select do |member|
             member.is_a?(RBS::AST::Members::MethodDefinition)
           end.map do |expected_method|
+            kind = expected_method.singleton? ? :singleton : :instance
             actual_method = actual.members.find do |member|
-              member.is_a?(RBS::AST::Members::MethodDefinition) && member.name == expected_method.name
+              member.is_a?(RBS::AST::Members::MethodDefinition) &&
+                member.name == expected_method.name &&
+                member.singleton? == expected_method.singleton?
             end
-            MethodNode.from_ast(expected_method.name.to_s, expected_method, actual_method)
+            MethodNode.from_ast(expected_method.name.to_s, expected_method, actual_method, kind:)
           end
         end
       end
@@ -49,6 +52,14 @@ module TypeEvalRb
         @expected = expected
         @actual = actual
         super()
+      end
+
+      def count_leaf
+        @instance_variable_nodes.sum(&:count_leaf) + @method_nodes.sum(&:count_leaf)
+      end
+
+      def count_matches
+        @instance_variable_nodes.sum(&:count_matches) + @method_nodes.sum(&:count_matches)
       end
 
       def pretty_print(q) # rubocop:disable Naming/MethodParameterName,Metrics/AbcSize, Metrics/MethodLength

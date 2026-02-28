@@ -31,6 +31,20 @@ RSpec.describe TypeEvalRb::ComparisonTree::ClassNode do
     end
   end
 
+  describe '#count_leaf' do
+    it 'sums instance_variables and methods leaf counts' do
+      expected = instance_variable_nodes.sum(&:count_leaf) + method_nodes.sum(&:count_leaf)
+      expect(class_node.count_leaf).to eq(expected)
+    end
+  end
+
+  describe '#count_matches' do
+    it 'sums instance_variables and methods match counts' do
+      expected = instance_variable_nodes.sum(&:count_matches) + method_nodes.sum(&:count_matches)
+      expect(class_node.count_matches).to eq(expected)
+    end
+  end
+
   describe '#pretty_print' do
     let(:node) { class_node }
 

@@ -1,0 +1,7 @@
+class Sample
+  @name: String
+
+  def greet: () -> String
+
+  def count: (Integer n) -> Integer
+end

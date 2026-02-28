@@ -1,0 +1,3 @@
+class KeywordParams
+  def connect: (host: String, port: Integer, ?timeout: Integer) -> bool
+end

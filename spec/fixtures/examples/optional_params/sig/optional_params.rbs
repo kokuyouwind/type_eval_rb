@@ -1,0 +1,3 @@
+class OptionalParams
+  def greet: (String name, ?String title) -> String
+end
