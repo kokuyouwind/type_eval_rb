@@ -55,13 +55,34 @@ RSpec.describe TypeEvalRb::ComparisonTree::MethodNode do
     end
   end
 
+  describe '.from_ast with keyword parameters' do
+    subject(:node) { described_class.from_ast('connect', method_def, nil) }
+
+    let(:env) { TypeEvalRb::Environment.from_path(FixturesHelper.example_path('keyword_params')) }
+    let(:class_decl) do
+      env.class_decls[RBS::Namespace.parse('::KeywordParams').to_type_name].decls.first.decl
+    end
+    let(:method_def) { class_decl.members.find { |m| m.name.to_s == 'connect' } }
+
+    it 'parses required keywords with param_type: :keyword and required: true' do
+      req_kw = node.parameters.select { |p| p.param_type == :keyword && p.required }
+      expect(req_kw.map(&:name)).to contain_exactly('host', 'port')
+    end
+
+    it 'parses optional keywords with param_type: :keyword and required: false' do
+      opt_kw = node.parameters.select { |p| p.param_type == :keyword && !p.required }
+      expect(opt_kw.size).to eq(1)
+      expect(opt_kw.first.name).to eq('timeout')
+    end
+  end
+
   describe '#pretty_print' do
     let(:node) { method_node }
 
     it_behaves_like 'output expected pretty_print', <<~EXPECTED.strip
       MethodNode(name=foo,#{' '}
         parameters=[
-          ArgumentNode(name=bar, required=true,#{' '}
+          ArgumentNode(name=bar, required=true, param_type=positional,#{' '}
             type=TypeNode( expected="::String", actual="untyped"))
       #{'    '}
         ],

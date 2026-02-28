@@ -18,7 +18,7 @@ module TypeEvalRb
 
         private
 
-        def parameters_to_nodes(expected, actual) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+        def parameters_to_nodes(expected, actual) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
           method_type = expected.overloads.first.method_type.type
           actual_method_type = actual&.overloads&.first&.method_type&.type
 
@@ -32,17 +32,40 @@ module TypeEvalRb
             build_argument_node(param, actual_param, required: false)
           end
 
-          required + optional
+          req_kw = method_type.required_keywords.map do |kw_name, param|
+            actual_param = actual_method_type&.required_keywords&.[](kw_name)
+            build_keyword_argument_node(kw_name, param, actual_param, required: true)
+          end
+
+          opt_kw = method_type.optional_keywords.map do |kw_name, param|
+            actual_param = actual_method_type&.optional_keywords&.[](kw_name)
+            build_keyword_argument_node(kw_name, param, actual_param, required: false)
+          end
+
+          required + optional + req_kw + opt_kw
         end
 
-        def build_argument_node(expected_param, actual_param, required:)
+        def build_argument_node(expected_param, actual_param, required:, param_type: :positional)
           ComparisonTree::ArgumentNode.new(
             name: expected_param.name.to_s,
             type: ComparisonTree::TypeNode.new(
               expected: expected_param.type,
               actual: actual_param ? actual_param.type : nil
             ),
-            required:
+            required:,
+            param_type:
+          )
+        end
+
+        def build_keyword_argument_node(kw_name, expected_param, actual_param, required:)
+          ComparisonTree::ArgumentNode.new(
+            name: kw_name.to_s,
+            type: ComparisonTree::TypeNode.new(
+              expected: expected_param.type,
+              actual: actual_param ? actual_param.type : nil
+            ),
+            required:,
+            param_type: :keyword
           )
         end
 
