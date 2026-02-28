@@ -14,6 +14,18 @@ RSpec.describe TypeEvalRb::ComparisonTree::ArgumentNode do
     end
   end
 
+  describe '#count_leaf' do
+    it 'delegates to type.count_leaf' do
+      expect(argument_node.count_leaf).to eq(type.count_leaf)
+    end
+  end
+
+  describe '#count_matches' do
+    it 'delegates to type.count_matches' do
+      expect(argument_node.count_matches).to eq(type.count_matches)
+    end
+  end
+
   describe '#pretty_print' do
     let(:node) { argument_node }
 

@@ -13,7 +13,7 @@ TypeEvalRb is a micro-benchmarking framework for Ruby type inference tools. It c
 #### ComparisonTree (`lib/type_eval_rb/comparison_tree.rb`)
 - ✅ Tree construction from two RBS environments (`from_envs`)
 - ✅ Pretty-print support
-- ❌ **Missing**: Metrics calculation (count_leaf, count_matches)
+- ✅ Metrics: `count_leaf`, `count_matches`, `accuracy`
 
 #### Node Types
 
@@ -23,7 +23,7 @@ TypeEvalRb is a micro-benchmarking framework for Ruby type inference tools. It c
 - ✅ Method collection and comparison
 - ✅ Construction from RBS AST declarations
 - ✅ Pretty-print support
-- ❌ **Missing**: Leaf counting and match counting
+- ✅ Metrics: `count_leaf` and `count_matches`
 - ❌ **Missing**: Inheritance comparison
 - ❌ **Missing**: Module mixins comparison (include/extend/prepend)
 - ❌ **Missing**: Class/singleton method distinction
@@ -34,6 +34,7 @@ TypeEvalRb is a micro-benchmarking framework for Ruby type inference tools. It c
 - ✅ Required positional parameters comparison
 - ✅ Return type comparison
 - ✅ Pretty-print support
+- ✅ Metrics: `count_leaf` and `count_matches` (sum of parameters + return_type)
 - ❌ **Missing**: Optional parameters
 - ❌ **Missing**: Rest parameters (`*args`)
 - ❌ **Missing**: Keyword parameters
@@ -46,13 +47,14 @@ TypeEvalRb is a micro-benchmarking framework for Ruby type inference tools. It c
 - ✅ Instance variable name comparison
 - ✅ Type comparison via TypeNode
 - ✅ Pretty-print support
-- ❌ **Missing**: Leaf counting and match counting
+- ✅ Metrics: `count_leaf` and `count_matches` (delegated to TypeNode)
 - ❌ **Missing**: Class instance variables (`self.@var`)
 
 ##### ArgumentNode (`lib/type_eval_rb/comparison_tree/argument_node.rb`)
 - ✅ Parameter name storage
 - ✅ Type comparison via TypeNode
 - ✅ Pretty-print support
+- ✅ Metrics: `count_leaf` and `count_matches` (delegated to TypeNode)
 - ❌ **Missing**: Optional parameter indicator
 - ❌ **Missing**: Rest parameter indicator
 - ❌ **Missing**: Keyword parameter indicator

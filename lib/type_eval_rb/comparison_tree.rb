@@ -33,6 +33,20 @@ module TypeEvalRb
       @actual = actual
     end
 
+    def count_leaf
+      @class_nodes.sum(&:count_leaf)
+    end
+
+    def count_matches
+      @class_nodes.sum(&:count_matches)
+    end
+
+    def accuracy
+      return 0.0 if count_leaf.zero?
+
+      count_matches.to_f / count_leaf
+    end
+
     def inspect
       "ComparisonTree(class_nodes=#{class_nodes.inspect})"
     end

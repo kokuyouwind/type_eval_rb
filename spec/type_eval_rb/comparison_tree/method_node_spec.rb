@@ -21,6 +21,18 @@ RSpec.describe TypeEvalRb::ComparisonTree::MethodNode do
     end
   end
 
+  describe '#count_leaf' do
+    it 'sums parameters and return_type leaf counts' do
+      expect(method_node.count_leaf).to eq(parameters.sum(&:count_leaf) + return_type.count_leaf)
+    end
+  end
+
+  describe '#count_matches' do
+    it 'sums parameters and return_type match counts' do
+      expect(method_node.count_matches).to eq(parameters.sum(&:count_matches) + return_type.count_matches)
+    end
+  end
+
   describe '#pretty_print' do
     let(:node) { method_node }
 

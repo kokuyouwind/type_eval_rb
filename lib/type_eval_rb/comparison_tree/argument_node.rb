@@ -11,6 +11,14 @@ module TypeEvalRb
         super()
       end
 
+      def count_leaf
+        @type.count_leaf
+      end
+
+      def count_matches
+        @type.count_matches
+      end
+
       def pretty_print(q) # rubocop:disable Naming/MethodParameterName
         q.group(2, "ArgumentNode(name=#{name}, ") do
           q.breakable

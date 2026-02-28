@@ -51,6 +51,14 @@ module TypeEvalRb
         super()
       end
 
+      def count_leaf
+        @instance_variable_nodes.sum(&:count_leaf) + @method_nodes.sum(&:count_leaf)
+      end
+
+      def count_matches
+        @instance_variable_nodes.sum(&:count_matches) + @method_nodes.sum(&:count_matches)
+      end
+
       def pretty_print(q) # rubocop:disable Naming/MethodParameterName,Metrics/AbcSize, Metrics/MethodLength
         q.group(2, "ClassNode(typename=#{typename}, ") do
           q.breakable

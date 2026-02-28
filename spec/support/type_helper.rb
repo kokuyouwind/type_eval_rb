@@ -37,5 +37,9 @@ module TypeHelper
     def instance_variable_node(name:, type:)
       TypeEvalRb::ComparisonTree::InstanceVariableNode.new(name:, type:)
     end
+
+    def class_node(typename:, instance_variable_nodes:, method_nodes:)
+      TypeEvalRb::ComparisonTree::ClassNode.new(typename:, instance_variable_nodes:, method_nodes:)
+    end
   end
 end
