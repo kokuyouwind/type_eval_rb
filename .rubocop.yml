@@ -35,6 +35,18 @@ Layout/LineLength:
 Style/Documentation:
   Enabled: false
 
+RSpec/FilePath:
+  Exclude:
+    - 'spec/integration/**/*'
+
+RSpec/SpecFilePathFormat:
+  Exclude:
+    - 'spec/integration/**/*'
+
+RSpec/DescribeClass:
+  Exclude:
+    - 'spec/integration/**/*'
+
 RSpec/NamedSubject:
   Enabled: false
 

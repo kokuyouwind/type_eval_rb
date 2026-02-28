@@ -178,8 +178,10 @@ Each feature implementation should include:
 - Edge case handling
 
 ### Integration Tests
-After core comparison logic is implemented:
-- Compare simple class definitions
+- ✅ `spec/integration/simple_comparison_spec.rb` - End-to-end test: fixture loading, tree structure, and metrics (count_leaf, count_matches, accuracy)
+- Fixtures: `spec/fixtures/integration/expected/` and `spec/fixtures/integration/actual/`
+
+Pending:
 - Compare inheritance hierarchies
 - Compare generic classes
 - Compare modules and interfaces
