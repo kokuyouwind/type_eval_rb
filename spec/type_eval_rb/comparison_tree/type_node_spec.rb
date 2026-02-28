@@ -62,6 +62,30 @@ RSpec.describe TypeEvalRb::ComparisonTree::TypeNode do
     end
   end
 
+  describe '#count_leaf' do
+    it 'returns 1' do
+      expect(type_node.count_leaf).to eq(1)
+    end
+  end
+
+  describe '#count_matches' do
+    context 'when types match' do
+      let(:type_node) { described_class.new(expected: TypeHelper.string, actual: TypeHelper.string) }
+
+      it 'returns 1' do
+        expect(type_node.count_matches).to eq(1)
+      end
+    end
+
+    context 'when types do not match' do
+      let(:type_node) { described_class.new(expected: TypeHelper.string, actual: TypeHelper.integer) }
+
+      it 'returns 0' do
+        expect(type_node.count_matches).to eq(0)
+      end
+    end
+  end
+
   describe '#pretty_print' do
     let(:node) { type_node }
 

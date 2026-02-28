@@ -66,6 +66,7 @@ TypeEvalRb is a micro-benchmarking framework for Ruby type inference tools. It c
   - untyped (Bases::Any) matches everything
   - Nil type comparison
   - nil actual returns false (missing type)
+- ✅ Metrics: `count_leaf` (always 1) and `count_matches` (1 if matches?, else 0)
 - ❌ **Missing**: Union type handling
 - ❌ **Missing**: Intersection type handling
 - ❌ **Missing**: Optional type handling (`Integer?`)

@@ -24,6 +24,14 @@ module TypeEvalRb
         end
       end
 
+      def count_leaf
+        1
+      end
+
+      def count_matches
+        matches? ? 1 : 0
+      end
+
       def matches?
         return true if untyped?(expected) || untyped?(actual)
         return false if actual.nil?
