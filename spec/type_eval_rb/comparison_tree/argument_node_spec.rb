@@ -12,6 +12,18 @@ RSpec.describe TypeEvalRb::ComparisonTree::ArgumentNode do
       expect(subject.name).to eq(name)
       expect(subject.type).to eq(type)
     end
+
+    it 'defaults required to true' do
+      expect(subject.required).to be true
+    end
+
+    context 'when required: false' do
+      let(:argument_node) { described_class.new(name:, type:, required: false) }
+
+      it 'sets required to false' do
+        expect(subject.required).to be false
+      end
+    end
   end
 
   describe '#count_leaf' do
@@ -30,7 +42,8 @@ RSpec.describe TypeEvalRb::ComparisonTree::ArgumentNode do
     let(:node) { argument_node }
 
     it_behaves_like 'output expected pretty_print', <<~EXPECTED.strip
-      ArgumentNode(name=foo,  type=TypeNode( expected="::String", actual="untyped"))
+      ArgumentNode(name=foo, required=true,#{' '}
+        type=TypeNode( expected="::String", actual="untyped"))
     EXPECTED
   end
 end

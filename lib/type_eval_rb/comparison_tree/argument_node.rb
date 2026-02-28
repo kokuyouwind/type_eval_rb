@@ -3,11 +3,12 @@
 module TypeEvalRb
   class ComparisonTree
     class ArgumentNode < Node
-      attr_reader :name, :type
+      attr_reader :name, :type, :required
 
-      def initialize(name:, type:)
+      def initialize(name:, type:, required: true)
         @name = name
         @type = type
+        @required = required
         super()
       end
 
@@ -20,7 +21,7 @@ module TypeEvalRb
       end
 
       def pretty_print(q) # rubocop:disable Naming/MethodParameterName
-        q.group(2, "ArgumentNode(name=#{name}, ") do
+        q.group(2, "ArgumentNode(name=#{name}, required=#{required}, ") do
           q.breakable
           q.text('type=')
           q.pp(type)

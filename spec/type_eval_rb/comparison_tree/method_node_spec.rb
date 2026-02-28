@@ -33,13 +33,35 @@ RSpec.describe TypeEvalRb::ComparisonTree::MethodNode do
     end
   end
 
+  describe '.from_ast' do
+    subject(:node) { described_class.from_ast('greet', method_def, nil) }
+
+    let(:env) { TypeEvalRb::Environment.from_path(FixturesHelper.example_path('optional_params')) }
+    let(:class_decl) do
+      env.class_decls[RBS::Namespace.parse('::OptionalParams').to_type_name].decls.first.decl
+    end
+    let(:method_def) { class_decl.members.find { |m| m.name.to_s == 'greet' } }
+
+    it 'parses required positionals with required: true' do
+      required = node.parameters.select(&:required)
+      expect(required.size).to eq(1)
+      expect(required.first.name).to eq('name')
+    end
+
+    it 'parses optional positionals with required: false' do
+      optional = node.parameters.reject(&:required)
+      expect(optional.size).to eq(1)
+      expect(optional.first.name).to eq('title')
+    end
+  end
+
   describe '#pretty_print' do
     let(:node) { method_node }
 
     it_behaves_like 'output expected pretty_print', <<~EXPECTED.strip
       MethodNode(name=foo,#{' '}
         parameters=[
-          ArgumentNode(name=bar,#{' '}
+          ArgumentNode(name=bar, required=true,#{' '}
             type=TypeNode( expected="::String", actual="untyped"))
       #{'    '}
         ],

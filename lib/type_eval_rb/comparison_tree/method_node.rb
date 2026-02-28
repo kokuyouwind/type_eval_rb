@@ -19,16 +19,31 @@ module TypeEvalRb
         private
 
         def parameters_to_nodes(expected, actual) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
-          expected.overloads.first.method_type.type.required_positionals.map.with_index do |expected_param, index|
-            actual_param = actual&.overloads&.first&.method_type&.type&.required_positionals&.[](index)
-            ComparisonTree::ArgumentNode.new(
-              name: expected_param.name.to_s,
-              type: ComparisonTree::TypeNode.new(
-                expected: expected_param.type,
-                actual: actual_param ? actual_param.type : nil
-              )
-            )
+          method_type = expected.overloads.first.method_type.type
+          actual_method_type = actual&.overloads&.first&.method_type&.type
+
+          required = method_type.required_positionals.map.with_index do |param, index|
+            actual_param = actual_method_type&.required_positionals&.[](index)
+            build_argument_node(param, actual_param, required: true)
           end
+
+          optional = method_type.optional_positionals.map.with_index do |param, index|
+            actual_param = actual_method_type&.optional_positionals&.[](index)
+            build_argument_node(param, actual_param, required: false)
+          end
+
+          required + optional
+        end
+
+        def build_argument_node(expected_param, actual_param, required:)
+          ComparisonTree::ArgumentNode.new(
+            name: expected_param.name.to_s,
+            type: ComparisonTree::TypeNode.new(
+              expected: expected_param.type,
+              actual: actual_param ? actual_param.type : nil
+            ),
+            required:
+          )
         end
 
         def return_types_to_node(expected, actual)
