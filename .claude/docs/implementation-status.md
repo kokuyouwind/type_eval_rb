@@ -59,9 +59,13 @@ TypeEvalRb is a micro-benchmarking framework for Ruby type inference tools. It c
 
 ##### TypeNode (`lib/type_eval_rb/comparison_tree/type_node.rb`)
 - ✅ Expected vs Actual type storage
-- ✅ Basic type-to-string conversion (ClassInstance)
+- ✅ Basic type-to-string conversion (ClassInstance, Nil, Any/untyped)
 - ✅ Pretty-print support
-- ❌ **Missing**: All type comparison logic
+- ✅ Basic type comparison logic (`matches?` method)
+  - ClassInstance exact match
+  - untyped (Bases::Any) matches everything
+  - Nil type comparison
+  - nil actual returns false (missing type)
 - ❌ **Missing**: Union type handling
 - ❌ **Missing**: Intersection type handling
 - ❌ **Missing**: Optional type handling (`Integer?`)

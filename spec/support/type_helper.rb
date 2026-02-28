@@ -14,6 +14,14 @@ module TypeHelper
       RBS::Types::ClassInstance.new(name: type_name('::String'), location: nil, args: [])
     end
 
+    def integer
+      RBS::Types::ClassInstance.new(name: type_name('::Integer'), location: nil, args: [])
+    end
+
+    def nil_type
+      RBS::Types::Bases::Nil.new(location: nil)
+    end
+
     def type_node(expected, actual)
       TypeEvalRb::ComparisonTree::TypeNode.new(expected:, actual:)
     end

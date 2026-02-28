@@ -24,12 +24,38 @@ module TypeEvalRb
         end
       end
 
+      def matches?
+        return true if untyped?(expected) || untyped?(actual)
+        return false if actual.nil?
+
+        compare_types(expected, actual)
+      end
+
       private
+
+      def untyped?(type)
+        type.is_a?(RBS::Types::Bases::Any)
+      end
+
+      def compare_types(expected, actual)
+        case expected
+        when RBS::Types::ClassInstance
+          actual.is_a?(RBS::Types::ClassInstance) && expected.name == actual.name
+        when RBS::Types::Bases::Nil
+          actual.is_a?(RBS::Types::Bases::Nil)
+        else
+          expected == actual
+        end
+      end
 
       def type_to_string(type)
         case type
         when RBS::Types::ClassInstance
           type.name.to_s
+        when RBS::Types::Bases::Nil
+          'nil'
+        when RBS::Types::Bases::Any
+          'untyped'
         else
           type.to_s
         end

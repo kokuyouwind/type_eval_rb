@@ -12,6 +12,56 @@ RSpec.describe TypeEvalRb::ComparisonTree::TypeNode do
     end
   end
 
+  describe '#matches?' do
+    context 'when expected and actual are identical ClassInstance types' do
+      let(:type_node) { described_class.new(expected: TypeHelper.string, actual: TypeHelper.string) }
+
+      it 'returns true' do
+        expect(type_node.matches?).to be true
+      end
+    end
+
+    context 'when actual is untyped' do
+      let(:type_node) { described_class.new(expected: TypeHelper.string, actual: TypeHelper.undefined) }
+
+      it 'returns true' do
+        expect(type_node.matches?).to be true
+      end
+    end
+
+    context 'when expected is untyped' do
+      let(:type_node) { described_class.new(expected: TypeHelper.undefined, actual: TypeHelper.string) }
+
+      it 'returns true' do
+        expect(type_node.matches?).to be true
+      end
+    end
+
+    context 'when expected is nil type and actual is nil type' do
+      let(:type_node) { described_class.new(expected: TypeHelper.nil_type, actual: TypeHelper.nil_type) }
+
+      it 'returns true' do
+        expect(type_node.matches?).to be true
+      end
+    end
+
+    context 'when expected and actual are different ClassInstance types' do
+      let(:type_node) { described_class.new(expected: TypeHelper.string, actual: TypeHelper.integer) }
+
+      it 'returns false' do
+        expect(type_node.matches?).to be false
+      end
+    end
+
+    context 'when actual is nil' do
+      let(:type_node) { described_class.new(expected: TypeHelper.string, actual: nil) }
+
+      it 'returns false' do
+        expect(type_node.matches?).to be false
+      end
+    end
+  end
+
   describe '#pretty_print' do
     let(:node) { type_node }
 
