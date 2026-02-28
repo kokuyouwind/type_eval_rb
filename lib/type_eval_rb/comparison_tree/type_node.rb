@@ -51,6 +51,8 @@ module TypeEvalRb
           actual.is_a?(RBS::Types::ClassInstance) && expected.name == actual.name
         when RBS::Types::Bases::Nil
           actual.is_a?(RBS::Types::Bases::Nil)
+        when RBS::Types::Block
+          actual.is_a?(RBS::Types::Block) && expected.type == actual.type
         else
           expected == actual
         end
@@ -64,6 +66,9 @@ module TypeEvalRb
           'nil'
         when RBS::Types::Bases::Any
           'untyped'
+        when RBS::Types::Block
+          params = type.type.required_positionals.map { |p| type_to_string(p.type) }.join(', ')
+          "{ (#{params}) -> #{type_to_string(type.type.return_type)} }"
         else
           type.to_s
         end

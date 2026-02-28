@@ -1,0 +1,5 @@
+class BlockParams
+  def each: () { (String) -> void } -> void
+
+  def map: () { (String) -> Integer } -> Array[Integer]
+end

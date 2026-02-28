@@ -3,7 +3,7 @@
 module TypeEvalRb
   class ComparisonTree
     class MethodNode < Node
-      attr_reader :name, :parameters, :return_type, :expected, :actual
+      attr_reader :name, :parameters, :return_type, :block, :expected, :actual
 
       class << self
         def from_ast(name, expected, actual)
@@ -11,6 +11,7 @@ module TypeEvalRb
             name:,
             parameters: parameters_to_nodes(expected, actual),
             return_type: return_types_to_node(expected, actual),
+            block: block_to_node(expected, actual),
             expected:,
             actual:
           )
@@ -85,6 +86,14 @@ module TypeEvalRb
           )
         end
 
+        def block_to_node(expected, actual)
+          expected_block = expected.overloads.first.method_type.block
+          return nil unless expected_block
+
+          actual_block = actual&.overloads&.first&.method_type&.block
+          ComparisonTree::TypeNode.new(expected: expected_block, actual: actual_block)
+        end
+
         def return_types_to_node(expected, actual)
           ComparisonTree::TypeNode.new(
             expected: expected.overloads.first.method_type.type.return_type,
@@ -93,21 +102,22 @@ module TypeEvalRb
         end
       end
 
-      def initialize(name:, parameters:, return_type:, expected: nil, actual: nil)
+      def initialize(name:, parameters:, return_type:, block: nil, expected: nil, actual: nil) # rubocop:disable Metrics/ParameterLists
         @name = name
         @parameters = parameters
         @return_type = return_type
+        @block = block
         @expected = expected
         @actual = actual
         super()
       end
 
       def count_leaf
-        @parameters.sum(&:count_leaf) + @return_type.count_leaf
+        @parameters.sum(&:count_leaf) + @return_type.count_leaf + (@block&.count_leaf || 0)
       end
 
       def count_matches
-        @parameters.sum(&:count_matches) + @return_type.count_matches
+        @parameters.sum(&:count_matches) + @return_type.count_matches + (@block&.count_matches || 0)
       end
 
       def pretty_print(q) # rubocop:disable Naming/MethodParameterName,Metrics/MethodLength

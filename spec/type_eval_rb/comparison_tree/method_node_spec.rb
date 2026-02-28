@@ -55,6 +55,24 @@ RSpec.describe TypeEvalRb::ComparisonTree::MethodNode do
     end
   end
 
+  describe '.from_ast with block parameter' do
+    subject(:node) { described_class.from_ast('each', method_def, nil) }
+
+    let(:env) { TypeEvalRb::Environment.from_path(FixturesHelper.example_path('block_params')) }
+    let(:class_decl) do
+      env.class_decls[RBS::Namespace.parse('::BlockParams').to_type_name].decls.first.decl
+    end
+    let(:method_def) { class_decl.members.find { |m| m.name.to_s == 'each' } }
+
+    it 'sets block to a TypeNode' do
+      expect(node.block).to be_a(TypeEvalRb::ComparisonTree::TypeNode)
+    end
+
+    it 'includes block in count_leaf' do
+      expect(node.count_leaf).to eq(node.parameters.sum(&:count_leaf) + node.return_type.count_leaf + 1)
+    end
+  end
+
   describe '.from_ast with rest parameters' do
     let(:env) { TypeEvalRb::Environment.from_path(FixturesHelper.example_path('rest_params')) }
     let(:class_decl) do
